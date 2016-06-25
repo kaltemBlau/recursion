@@ -10,18 +10,18 @@ namespace Recursion
     {
         static void Main(string[] args)
         {
-            FactorialCalculator newCalculator = new FactorialCalculator();
+            FactorialCalculator newCalculator = new FactorialCalculator(isVerbose: true);
         }
     }
     class FactorialCalculator
     {
         int inputInt;
         int factorial;
-        public FactorialCalculator()
+        public FactorialCalculator(bool isVerbose = false)
         {
-            inputInt = getInputInt();
+            inputInt = getInputInt(isVerbose);
             factorial = calculateFactorial(inputInt);
-            displayResult(n: inputInt, result: factorial);
+            displayResult(n: inputInt, result: factorial, verboseOutput: isVerbose);
         }
         public FactorialCalculator(int n)
         {
@@ -44,22 +44,31 @@ namespace Recursion
                 return n * calculateFactorial(n - 1);
             }
         }
-        private int getInputInt()
+        private int getInputInt(bool verbose = false)
         {
             string rawInput;
             int inputInt;
-            Console.WriteLine("Calculate a factorial by entering an integer greater than or equal to zero:");
+            if (verbose)
+                Console.WriteLine("Calculate a factorial by entering an integer greater than or equal to zero:");
+            else
+                Console.WriteLine("Enter an integer >=0:");
             rawInput = Console.ReadLine();
             while (!Int32.TryParse(rawInput, out inputInt) || inputInt < 0)
             {
-                Console.WriteLine("You did not enter a valid number.\nPlease enter an integer greater than or equal to zero:");
+                if (verbose)
+                    Console.WriteLine("You did not enter a valid number.\nPlease enter an integer greater than or equal to zero:");
+                else
+                    Console.WriteLine("Invalid input integer. Reenter:");
                 rawInput = Console.ReadLine();
             }
             return inputInt;
         }
-        private void displayResult(int n, int result)
+        private void displayResult(int n, int result, bool verboseOutput = false)
         {
-            Console.WriteLine("The factorial of {0} is {1}", n, result);
+            if (verboseOutput)
+                Console.WriteLine("The factorial of {0} is {1}.", n, result);
+            else
+                Console.WriteLine("{0}! = {1}.", n, result);
             Console.ReadLine();
         }
     }
